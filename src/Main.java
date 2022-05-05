@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        int cols = 3;
-        int rows = 20;
+        int cols = 20;
+        int rows = 3;
 
         ArrayList<ArrayList<Integer>> testMatrix = new ArrayList<>(rows);
 
@@ -17,8 +17,8 @@ public class Main {
 
         var possibleStates = PentominoEncoder.generateBoard(testMatrix);
 
-        //DLX dlx = new DLX(possibleStates.get(0).size(), possibleStates);
-        DLX dlx = new DLX(possibleStates.size(), possibleStates);
+        DLX dlx = new DLX(rows * cols, possibleStates);
+        //DLX dlx = new DLX(possibleStates.size(), possibleStates);
         dlx.run();
     }
 }

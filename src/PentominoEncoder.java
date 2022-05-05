@@ -35,7 +35,7 @@ public class PentominoEncoder {
 
                         // If rotation is valid create an encoding and add it
                         if (validRotation) {
-                            ArrayList<Integer> newEncoding = generateEncoding(shape, maxWidth, maxHeight, row, col, rotation);
+                            ArrayList<Integer> newEncoding = generateEncoding(maxWidth, maxHeight, row, col, rotation);
                             validPositions.add(newEncoding);
                         }
                     }
@@ -46,18 +46,16 @@ public class PentominoEncoder {
         return validPositions;
     }
 
-    static private ArrayList<Integer> generateEncoding(int shape, int maxWidth, int maxHeight, int row, int col, int[] rotation) {
+    static private ArrayList<Integer> generateEncoding(int maxWidth, int maxHeight, int row, int col, int[] rotation) {
         // Creating a 2d ArrayList to represent the shape placed, and fill with 0s
         ArrayList<ArrayList<Integer>> shapeEncoding = new ArrayList<>(maxHeight);
         for (int i = 0; i < maxHeight; i++) {
-            ArrayList<Integer> newArr = new ArrayList<>(maxWidth);
-            for (int j = 0; j < maxWidth; j++) {
-                newArr.add(0);
-            }
+            ArrayList<Integer> newArr = new ArrayList<>(Collections.nCopies(maxWidth, 0));
             shapeEncoding.add(newArr);
         }
 
-        // Apply shape to 2D array
+        // Apply shape to 2D array, loc (row, col) is assumed to be valid.
+        shapeEncoding.get(row).set(col, 1);
         for (int i = 0; i < rotation.length / 2; i++) {
             int xCoord = col + rotation[i * 2];
             int yCoord = row + rotation[i * 2 + 1];
@@ -66,26 +64,17 @@ public class PentominoEncoder {
         }
 
         // Collect all arrays into a 1D array
-        int listLength = maxHeight * maxWidth + Shapes.shapes.length;
-        ArrayList<Integer> result = new ArrayList<>(Collections.nCopies(listLength, 0));
+        ArrayList<Integer> result = new ArrayList<>(Collections.nCopies(maxHeight * maxWidth, 0));
 
-        // Set shape
-        result.set(shape, 1);
-
-        int step = Shapes.shapes.length;
-        for (int i = 0; i < shapeEncoding.size(); i++) {
-            for (int j = 0; j < shapeEncoding.get(i).size(); j++) {
-                if (shapeEncoding.get(i).get(j) == 1) {
-                    result.set(step, 1);
-                }
-                step++;
+        // Flatten 2D array
+        int index = 0;
+        for (int iRow = 0; iRow < shapeEncoding.size(); iRow++) {
+            for (int jCol = 0; jCol < shapeEncoding.get(iRow).size(); jCol++) {
+                int indexVal = shapeEncoding.get(iRow).get(jCol);
+                result.set(index, indexVal);
+                index++;
             }
         }
-
-        //for (var r : result) {
-            //System.out.print(r + ",");
-        //}
-        //System.out.println("");
 
         return result;
     }

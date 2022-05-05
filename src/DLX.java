@@ -126,27 +126,20 @@ public class DLX {
         ColumnNode c = this.selectColumn();
         c.cover();
 
-        DataNode row = c.D;
-        while (row != c) {
-            this.solution.add(k, row);
+        for (DataNode row = c.D; row != c; row = row.D) {
+            this.solution.add(row);
 
-            DataNode right = row.R;
-            while (right != row) {
+            for (DataNode right = row.R; right != row; right = right.R) {
                 right.C.cover();
-                right = right.R;
             }
 
             this.search(k + 1);
-
-            row = this.solution.get(k);
+            row = this.solution.remove(this.solution.size() - 1);
             c = row.C;
-            DataNode left = row.L;
-            while(left != row) {
-                left.C.uncover();
-                left = left.L;
-            }
 
-            row = row.D;
+            for (DataNode left = row.L; left != row; left = left.L) {
+                left.C.uncover();
+            }
         }
         c.uncover();
     }
