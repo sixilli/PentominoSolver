@@ -76,6 +76,15 @@ public class PentominoEncoder {
             }
         }
 
-        return result;
+        ArrayList<Integer> result2 = new ArrayList<>();
+        for (int i = 0; i < result.size(); i++) {
+            int num = result.get(i);
+            if (num == 1) {
+                result2.add(i);
+            }
+        }
+        //System.out.println(result2);
+
+        return result2;
     }
 }
