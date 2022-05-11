@@ -120,20 +120,17 @@ public class DLX {
         if (this.head.R == this.head) {
             this.solutions++;
             //this.printSolution();
-            System.out.println(0);
             return;
         }
-        System.out.println(1);
 
         ColumnNode c = this.selectColumn();
         c.cover();
 
         for (DataNode row = c.D; row != c; row = row.D) {
             this.solution.add(row);
-            System.out.println(2);
+
             for (DataNode right = row.R; right != row; right = right.R) {
                 right.C.cover();
-                System.out.println(3);
             }
 
             this.search(k + 1);
@@ -141,7 +138,6 @@ public class DLX {
             c = row.C;
 
             for (DataNode left = row.L; left != row; left = left.L) {
-                System.out.println(4);
                 left.C.uncover();
             }
         }

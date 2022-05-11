@@ -4,11 +4,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class PentominoEncoder {
-    static ArrayList<ArrayList<Integer>> generateBoard(ArrayList<ArrayList<Integer>> newBoard) {
+    static ArrayList<ArrayList<Integer>> generateBoard(int maxHeight, int maxWidth) {
         ArrayList<ArrayList<Integer>> validPositions = new ArrayList<>();
-
-        int maxHeight = newBoard.size();
-        int maxWidth = newBoard.get(0).size();
 
         for (int row = 0; row < maxHeight; row++) {
             for (int col = 0; col < maxWidth; col++) {
@@ -35,7 +32,7 @@ public class PentominoEncoder {
 
                         // If rotation is valid create an encoding and add it
                         if (validRotation) {
-                            ArrayList<Integer> newEncoding = generateEncoding(maxWidth, maxHeight, row, col, rotation);
+                            ArrayList<Integer> newEncoding = generateEncoding(shape, maxWidth, row, col, rotation);
                             validPositions.add(newEncoding);
                         }
                     }
@@ -46,45 +43,19 @@ public class PentominoEncoder {
         return validPositions;
     }
 
-    static private ArrayList<Integer> generateEncoding(int maxWidth, int maxHeight, int row, int col, int[] rotation) {
-        // Creating a 2d ArrayList to represent the shape placed, and fill with 0s
-        ArrayList<ArrayList<Integer>> shapeEncoding = new ArrayList<>(maxHeight);
-        for (int i = 0; i < maxHeight; i++) {
-            ArrayList<Integer> newArr = new ArrayList<>(Collections.nCopies(maxWidth, 0));
-            shapeEncoding.add(newArr);
-        }
+    static private ArrayList<Integer> generateEncoding(int shape, int maxWidth, int row, int col, int[] rotation) {
+        ArrayList<Integer> encoding = new ArrayList<>(6);
 
-        // Apply shape to 2D array, loc (row, col) is assumed to be valid.
-        shapeEncoding.get(row).set(col, 1);
+        encoding.add(shape);
+        encoding.add(row * maxWidth + col + 12);
         for (int i = 0; i < rotation.length / 2; i++) {
             int xCoord = col + rotation[i * 2];
             int yCoord = row + rotation[i * 2 + 1];
+            int numToInsert = yCoord * maxWidth + xCoord + 12;
 
-            shapeEncoding.get(yCoord).set(xCoord, 1);
+            encoding.add(numToInsert);
         }
 
-        // Collect all arrays into a 1D array
-        ArrayList<Integer> result = new ArrayList<>(Collections.nCopies(maxHeight * maxWidth, 0));
-
-        // Flatten 2D array
-        int index = 0;
-        for (int iRow = 0; iRow < shapeEncoding.size(); iRow++) {
-            for (int jCol = 0; jCol < shapeEncoding.get(iRow).size(); jCol++) {
-                int indexVal = shapeEncoding.get(iRow).get(jCol);
-                result.set(index, indexVal);
-                index++;
-            }
-        }
-
-        ArrayList<Integer> result2 = new ArrayList<>();
-        for (int i = 0; i < result.size(); i++) {
-            int num = result.get(i);
-            if (num == 1) {
-                result2.add(i);
-            }
-        }
-        //System.out.println(result2);
-
-        return result2;
+        return encoding;
     }
 }
