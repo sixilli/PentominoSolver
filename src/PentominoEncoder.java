@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class PentominoEncoder {
-    static ArrayList<ArrayList<Integer>> generateBoard(int maxHeight, int maxWidth) {
+    static ArrayList<ArrayList<Integer>> generateEncodings(int maxHeight, int maxWidth) {
         ArrayList<ArrayList<Integer>> validPositions = new ArrayList<>();
 
         for (int row = 0; row < maxHeight; row++) {
@@ -32,7 +32,7 @@ public class PentominoEncoder {
 
                         // If rotation is valid create an encoding and add it
                         if (validRotation) {
-                            ArrayList<Integer> newEncoding = generateEncoding(shape, maxWidth, row, col, rotation);
+                            ArrayList<Integer> newEncoding = generateEncodingForPosition(shape, maxWidth, row, col, rotation);
                             validPositions.add(newEncoding);
                         }
                     }
@@ -43,7 +43,7 @@ public class PentominoEncoder {
         return validPositions;
     }
 
-    static private ArrayList<Integer> generateEncoding(int shape, int maxWidth, int row, int col, int[] rotation) {
+    static private ArrayList<Integer> generateEncodingForPosition(int shape, int maxWidth, int row, int col, int[] rotation) {
         ArrayList<Integer> encoding = new ArrayList<>(6);
 
         encoding.add(shape);
